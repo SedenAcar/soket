@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket.IO Sohbet Uygulaması</title>
+</head>
+<body>
+  <ul id="messages"></ul>
+  <form id="chat-form">
+    <input id="chat-input" type="text" autocomplete="off" />
+    <button>Gönder</button>
+  </form>
+
+  <script type="module">
+    import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
+
+    const socket = io();
+
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const messages = document.getElementById('messages');
+
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (chatInput.value) {
+        socket.emit('chat message', chatInput.value);
+        chatInput.value = '';
+      }
+    });
+
+    socket.on('chat message', (msg) => {
+      const li = document.createElement('li');
+      li.textContent = msg;
+      messages.appendChild(li);
+    });
+  </script>
+</body>
+</html>
